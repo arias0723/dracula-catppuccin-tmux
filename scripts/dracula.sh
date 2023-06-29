@@ -30,16 +30,16 @@ main()
 
   # Catppuccin Color Pallette
   white='#BAC2DE'
-  gray='#A6ADC8'
-  dark_gray='#45475A'
-  light_purple='#CBA6F7'
-  dark_purple='#B4BEFE'
+  gray='#45475A'
+  dark_gray='#1E1E2E'
+  light_purple='#89B4FA'
+  dark_purple='#89B4FA'
   cyan='#94E2D5'
   green='#A6E3A1'
   orange='#F9E2AF'
   red='#F38BA8'
   pink='#F5C2E7'
-  yellow='#F9E2AF'
+  yellow='#f1fa8c'
 
   # Handle left icon configuration
   case $show_left_icon in
@@ -171,7 +171,7 @@ main()
 
     elif [ $plugin = "network" ]; then
       IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-network-colors" "cyan dark_gray")
-      script="#($current_dir/network.sh)"
+      script="#($current_dir/network_ip.sh)"
 
     elif [ $plugin = "network-bandwidth" ]; then
       IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-network-bandwidth-colors" "cyan dark_gray")
@@ -209,7 +209,7 @@ main()
     elif [ $plugin = "time" ]; then
       IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-time-colors" "dark_purple white")
       if [ -n "$time_format" ]; then
-        script=${time_format}
+        script="󰃭 "${time_format}
       else
         if $show_day_month && $show_military ; then # military time and dd/mm
           script="%a %d/%m %R ${timezone} "
@@ -230,6 +230,7 @@ main()
       if $show_empty_plugins; then
         tmux set-option -ga status-right "#[fg=${!colors[0]},bg=${powerbg},nobold,nounderscore,noitalics]${right_sep}#[fg=${!colors[1]},bg=${!colors[0]}] $script "
       else
+        # tmux set-option -ga status-right "#[bg=${!colors[0]},fg=${gray},nobold,nounderscore,noitalics]${right_sep}"
         tmux set-option -ga status-right "#{?#{==:$script,},,#[fg=${!colors[0]},nobold,nounderscore,noitalics]${right_sep}#[fg=${!colors[1]},bg=${!colors[0]}] $script }"
       fi
       powerbg=${!colors[0]}
@@ -244,7 +245,7 @@ main()
 
   # Window option
   if $show_powerline; then
-    tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${dark_purple}]${left_sep}#[fg=${white},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
+    tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${dark_purple}]${left_sep}#[fg=${dark_gray},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
   else
     tmux set-window-option -g window-status-current-format "#[fg=${white},bg=${dark_purple}] #I #W${current_flags} "
   fi
